@@ -1,0 +1,6 @@
+.libs
+*.lo
+*.o
+build/output/*
+tests/aho_corasick/aho_corasick_tests
+!.gitkeep
