@@ -24,8 +24,8 @@ Consider following use case. You have file with relatively static set of terms w
 
 ```
 <?php
-$loader = new MultiSearch\BundlesLoader();
-$needlesBundle = $loader->loadNeedlesBundle('file_with_strings.txt');
+$loader = new MultiSearch\NeedlesBundleLoader();
+$needlesBundle = $loader->loadFromFile('file_with_strings.txt');
 foreach ($needlesBundle->getNeedles() as $needle) {
 	var_dump($needle->getKey());
 }
