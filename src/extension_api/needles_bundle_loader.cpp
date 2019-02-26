@@ -1,4 +1,4 @@
-#include "bundles_loader.h"
+#include "needles_bundle_loader.h"
 #include "common.h"
 #include "needles_bundle.h"
 #include "multisearch_exception.h"
@@ -18,7 +18,7 @@
 using TriePtrT = std::shared_ptr<multisearch_needles_bundle_trie>;
 
 
-zend_class_entry *multisearch_ce_bundles_loader;
+zend_class_entry *multisearch_ce_needles_bundle_loader;
 
 std::map<std::string, std::pair<TriePtrT, time_t>> bundles;
 
@@ -108,13 +108,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_loadNeedlesBundle, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 
-PHP_METHOD(BundlesLoader, __construct)
+PHP_METHOD(NeedlesBundleLoader, __construct)
 {
 	ZEND_PARSE_PARAMETERS_START(0, 0)
 	ZEND_PARSE_PARAMETERS_END();
 }
 
-PHP_METHOD(BundlesLoader, loadNeedlesBundle)
+PHP_METHOD(NeedlesBundleLoader, loadNeedlesBundle)
 {
 	char *fp;
 	size_t fp_len;
@@ -154,17 +154,17 @@ PHP_METHOD(BundlesLoader, loadNeedlesBundle)
 	multisearch_init_needles_bundle(return_value, trie);
 }
 
-static zend_function_entry bundles_loader_functions[] = {
-	PHP_ME(BundlesLoader, __construct, arginfo_void, ZEND_ACC_PUBLIC)
-	PHP_ME(BundlesLoader, loadNeedlesBundle, arginfo_loadNeedlesBundle, ZEND_ACC_PUBLIC)
+static zend_function_entry needles_bundle_loader_functions[] = {
+	PHP_ME(NeedlesBundleLoader, __construct, arginfo_void, ZEND_ACC_PUBLIC)
+	PHP_ME(NeedlesBundleLoader, loadNeedlesBundle, arginfo_loadNeedlesBundle, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
 
 
-void multisearch_register_class_bundles_loader()
+void multisearch_register_class_needles_bundle_loader()
 {
 	zend_class_entry tmp_ce;
-	INIT_CLASS_ENTRY(tmp_ce, ZEND_NS_NAME(MULTISEARCH_NS, "BundlesLoader"), bundles_loader_functions);
+	INIT_CLASS_ENTRY(tmp_ce, ZEND_NS_NAME(MULTISEARCH_NS, "NeedlesBundleLoader"), needles_bundle_loader_functions);
 
-	multisearch_ce_bundles_loader = zend_register_internal_class(&tmp_ce TSRMLS_CC);
+	multisearch_ce_needles_bundle_loader = zend_register_internal_class(&tmp_ce TSRMLS_CC);
 }

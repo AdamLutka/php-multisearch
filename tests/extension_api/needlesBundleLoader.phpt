@@ -1,10 +1,10 @@
 --TEST--
-Tests bundles loader
+Tests needles bundle loader
 --FILE--
 <?php
 declare(strict_types=1);
 
-define('FIXTURE_SOURCE_FILEPATH', __DIR__ . '/bundlesLoader.fixture');
+define('FIXTURE_SOURCE_FILEPATH', __DIR__ . '/needlesBundleLoader.fixture');
 define('FIXTURE_FILEPATH', FIXTURE_SOURCE_FILEPATH . '.tmp');
 
 copy(FIXTURE_SOURCE_FILEPATH, FIXTURE_FILEPATH);
@@ -12,7 +12,7 @@ touch(FIXTURE_FILEPATH, filemtime(FIXTURE_SOURCE_FILEPATH));
 
 
 
-$loader = new MultiSearch\BundlesLoader();
+$loader = new MultiSearch\NeedlesBundleLoader();
 try {
 	$loader->loadNeedlesBundle(FIXTURE_FILEPATH . '.notExists');
 }

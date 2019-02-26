@@ -2,7 +2,7 @@
 #include "extension_api/needle.h"
 #include "extension_api/search_hit.h"
 #include "extension_api/needles_bundle.h"
-#include "extension_api/bundles_loader.h"
+#include "extension_api/needles_bundle_loader.h"
 #include "extension_api/multisearch_exception.h"
 
 
@@ -11,7 +11,7 @@ PHP_MINIT_FUNCTION(multisearch)
 	multisearch_register_class_needle();
 	multisearch_register_class_search_hit();
 	multisearch_register_class_needles_bundle();
-	multisearch_register_class_bundles_loader();
+	multisearch_register_class_needles_bundle_loader();
 	multisearch_register_class_exception();
 
 	return SUCCESS;

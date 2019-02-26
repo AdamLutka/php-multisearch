@@ -9,7 +9,7 @@ define('FIXTURE_HAYSTACK_FILEPATH', __DIR__ . '/perf.fixture.haystack');
 define('FIXTURE_RESULT_FILEPATH', __DIR__ . '/perf.fixture.result');
 
 
-$loader = new MultiSearch\BundlesLoader();
+$loader = new MultiSearch\NeedlesBundleLoader();
 
 $t = microtime(true);
 $needles = $loader->loadNeedlesBundle(FIXTURE_NEEDLES_FILEPATH);
