@@ -103,7 +103,7 @@ TriePtrT load_trie(std::string filepath)
 ZEND_BEGIN_ARG_INFO_EX(arginfo_void, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_loadNeedlesBundle, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_loadFromFile, 0, 0, 1)
 	ZEND_ARG_INFO(0, filepath)
 ZEND_END_ARG_INFO()
 
@@ -114,7 +114,7 @@ PHP_METHOD(NeedlesBundleLoader, __construct)
 	ZEND_PARSE_PARAMETERS_END();
 }
 
-PHP_METHOD(NeedlesBundleLoader, loadNeedlesBundle)
+PHP_METHOD(NeedlesBundleLoader, loadFromFile)
 {
 	char *fp;
 	size_t fp_len;
@@ -156,7 +156,7 @@ PHP_METHOD(NeedlesBundleLoader, loadNeedlesBundle)
 
 static zend_function_entry needles_bundle_loader_functions[] = {
 	PHP_ME(NeedlesBundleLoader, __construct, arginfo_void, ZEND_ACC_PUBLIC)
-	PHP_ME(NeedlesBundleLoader, loadNeedlesBundle, arginfo_loadNeedlesBundle, ZEND_ACC_PUBLIC)
+	PHP_ME(NeedlesBundleLoader, loadFromFile, arginfo_loadFromFile, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
 

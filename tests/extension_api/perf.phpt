@@ -12,7 +12,7 @@ define('FIXTURE_RESULT_FILEPATH', __DIR__ . '/perf.fixture.result');
 $loader = new MultiSearch\NeedlesBundleLoader();
 
 $t = microtime(true);
-$needles = $loader->loadNeedlesBundle(FIXTURE_NEEDLES_FILEPATH);
+$needles = $loader->loadFromFile(FIXTURE_NEEDLES_FILEPATH);
 $loadTime = microtime(true) - $t;
 
 $t = microtime(true);
