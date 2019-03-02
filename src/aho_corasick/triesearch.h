@@ -1,5 +1,5 @@
-#ifndef MULTISEARCH_TRIESEARCH_H
-#define MULTISEARCH_TRIESEARCH_H
+#ifndef MULTISEARCH_AHOC_TRIESEARCH_H
+#define MULTISEARCH_AHOC_TRIESEARCH_H
 
 #include <memory>
 #include <iterator>

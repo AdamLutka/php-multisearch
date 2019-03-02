@@ -1,5 +1,5 @@
-#ifndef MULTISEARCH_TRIENODE_H
-#define MULTISEARCH_TRIENODE_H
+#ifndef MULTISEARCH_AHOC_TRIENODE_H
+#define MULTISEARCH_AHOC_TRIENODE_H
 
 #include <map>
 #include <memory>

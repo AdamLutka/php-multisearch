@@ -1,5 +1,5 @@
-#ifndef MULTISEARCH_TRIE_H
-#define MULTISEARCH_TRIE_H
+#ifndef MULTISEARCH_AHOC_TRIE_H
+#define MULTISEARCH_AHOC_TRIE_H
 
 #include "trienode.h"
 #include "trieiterator.h"
