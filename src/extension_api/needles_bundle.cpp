@@ -65,12 +65,12 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_void, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_insert, 0, 0, 1)
-	ZEND_ARG_INFO(0, key)
-	ZEND_ARG_INFO(0, value)
+	ZEND_ARG_TYPE_INFO(0, key, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, value, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_searchIn, 0, 0, 1)
-	ZEND_ARG_INFO(0, haystack)
+	ZEND_ARG_TYPE_INFO(0, haystack, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 
