@@ -5,15 +5,16 @@ extern "C" {
 	#include "php.h"
 }
 
-#include "../aho_corasick/trie.h"
+#include "../trie.h"
 #include <string>
 #include <memory>
 
-typedef multisearch::ahocorasick::Trie<std::string, std::string> multisearch_needles_bundle_trie;
+using multisearch_needles_bundle_trie = multisearch::trie;
+using multisearch_needles_bundle_trie_ptr = multisearch::trie_ptr;
 
 extern zend_class_entry *multisearch_ce_needles_bundle;
 
 void multisearch_register_class_needles_bundle();
-void multisearch_init_needles_bundle(zval* bundle, const std::shared_ptr<multisearch_needles_bundle_trie>& trie);
+void multisearch_init_needles_bundle(zval* bundle, const multisearch_needles_bundle_trie_ptr& trie);
 
 #endif

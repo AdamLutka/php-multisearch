@@ -12,7 +12,7 @@ zend_object_handlers needles_bundle_object_handlers;
 
 typedef struct {
 	zend_object std;
-	std::shared_ptr<multisearch_needles_bundle_trie> trie;
+	multisearch_needles_bundle_trie_ptr trie;
 } needles_bundle_object;
 
 static inline needles_bundle_object *php_needles_bundle_from_obj(zend_object *obj) {
@@ -25,7 +25,7 @@ static inline needles_bundle_object *php_needles_bundle_from_obj(zend_object *ob
 zend_class_entry *multisearch_ce_needles_bundle;
 
 
-static zend_object *needles_bundle_create_object(const std::shared_ptr<multisearch_needles_bundle_trie>& trie)
+static zend_object *needles_bundle_create_object(const multisearch_needles_bundle_trie_ptr& trie)
 {
 	needles_bundle_object *intern = (needles_bundle_object*)ecalloc(1, sizeof(needles_bundle_object));
 
@@ -34,13 +34,13 @@ static zend_object *needles_bundle_create_object(const std::shared_ptr<multisear
 
 	intern->std.handlers = &needles_bundle_object_handlers;
 
-	new (&intern->trie) std::shared_ptr<multisearch_needles_bundle_trie>();
+	new (&intern->trie) multisearch_needles_bundle_trie_ptr();
 	intern->trie = trie;
 
 	return &intern->std;
 }
 
-void multisearch_init_needles_bundle(zval* bundle, const std::shared_ptr<multisearch_needles_bundle_trie>& trie)
+void multisearch_init_needles_bundle(zval* bundle, const multisearch_needles_bundle_trie_ptr& trie)
 {
 	ZVAL_OBJ(bundle, needles_bundle_create_object(trie));
 }
