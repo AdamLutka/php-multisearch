@@ -38,3 +38,16 @@ void multisearch::storage::trie_repository::set_trie(const std::string& key, tri
 {
 	tries[key] = std::make_pair(trie, validityStamp);
 }
+
+
+void multisearch::storage::trie_repository::remove_trie(trie_ptr trie)
+{
+	for (auto it = tries.begin(); it != tries.end(); ++it)
+	{
+		if (it->second.first == trie)
+		{
+			tries.erase(it);
+			break;
+		}
+	}
+}

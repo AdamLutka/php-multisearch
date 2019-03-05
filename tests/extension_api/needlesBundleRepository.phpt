@@ -51,6 +51,14 @@ var_dump(count($needlesBundle1->getNeedles()));
 var_dump(count($needlesBundle2->getNeedles()));
 var_dump(count($needlesBundle3->getNeedles()));
 
+echo "\n";
+
+$repository->dispose($needlesBundle1);
+
+var_dump(count($needlesBundle1->getNeedles()));
+var_dump(count($needlesBundle2->getNeedles()));
+var_dump(count($needlesBundle3->getNeedles()));
+
 
 unlink(FIXTURE_FILEPATH);
 
@@ -76,5 +84,9 @@ string(4) "key3"
 string(6) "value3"
 
 int(2)
+int(3)
+int(3)
+
+int(0)
 int(3)
 int(3)

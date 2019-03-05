@@ -45,6 +45,19 @@ void multisearch_needles_bundle_init(zval* bundle, const multisearch_needles_bun
 	ZVAL_OBJ(bundle, needles_bundle_create_object(trie));
 }
 
+multisearch_needles_bundle_trie_ptr multisearch_needles_bundle_dispose(zval* bundle)
+{
+	needles_bundle_object *intern = Z_NB_OBJ_P(bundle);
+	if (intern && intern->trie)
+	{
+		auto trie = intern->trie;
+		intern->trie.reset();
+		return trie;
+	}
+
+	return nullptr;
+}
+
 static void needles_bundle_object_destroy(zend_object *object)
 {
 	zend_objects_destroy_object(object); /* call __destruct() from userland */

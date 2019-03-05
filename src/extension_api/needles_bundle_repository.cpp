@@ -21,6 +21,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_fromFile, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, filepath, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_dispose, 0, 0, 1)
+	MULTISEARCH_ARG_OBJ_INFO(0, needlesBundle, NeedlesBundle, 0)
+ZEND_END_ARG_INFO()
+
 
 PHP_METHOD(NeedlesBundleRepository, __construct)
 {
@@ -84,10 +88,26 @@ PHP_METHOD(NeedlesBundleRepository, fromFile)
 	multisearch_needles_bundle_init(return_value, trie);
 }
 
+PHP_METHOD(NeedlesBundleRepository, dispose)
+{
+	zval* bundle;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_OBJECT_OF_CLASS(bundle, multisearch_ce_needles_bundle)
+	ZEND_PARSE_PARAMETERS_END();
+
+
+	trie_repository::remove_trie(multisearch_needles_bundle_dispose(bundle));
+
+
+	RETURN_NULL();
+}
+
 static zend_function_entry needles_bundle_repository_functions[] = {
 	PHP_ME(NeedlesBundleRepository, __construct, arginfo_void, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundleRepository, getInstance, arginfo_void, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
 	PHP_ME(NeedlesBundleRepository, fromFile, arginfo_fromFile, ZEND_ACC_PUBLIC)
+	PHP_ME(NeedlesBundleRepository, dispose, arginfo_dispose, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
 

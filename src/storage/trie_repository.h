@@ -24,6 +24,8 @@ namespace multisearch
 			trie_ptr get_trie(const std::string& key, std::time_t validityStamp = 0);
 			void set_trie(const std::string& key, trie_ptr trie, std::time_t validityStamp = 0);
 
+			void remove_trie(trie_ptr trie);
+
 		}
 	}
 }
