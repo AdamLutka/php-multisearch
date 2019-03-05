@@ -43,7 +43,7 @@ PHP_METHOD(NeedlesBundleLoader, loadFromFile)
 		return;
 	}
 
-	multisearch_init_needles_bundle(return_value, trie);
+	multisearch_needles_bundle_init(return_value, trie);
 }
 
 static zend_function_entry needles_bundle_loader_functions[] = {

@@ -81,7 +81,7 @@ PHP_METHOD(NeedlesBundleRepository, fromFile)
 		trie_repository::set_trie(canonicalized_filepath, trie, modified);
 	}
 
-	multisearch_init_needles_bundle(return_value, trie);
+	multisearch_needles_bundle_init(return_value, trie);
 }
 
 static zend_function_entry needles_bundle_repository_functions[] = {

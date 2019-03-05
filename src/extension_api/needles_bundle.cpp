@@ -40,7 +40,7 @@ static zend_object *needles_bundle_create_object(const multisearch_needles_bundl
 	return &intern->std;
 }
 
-void multisearch_init_needles_bundle(zval* bundle, const multisearch_needles_bundle_trie_ptr& trie)
+void multisearch_needles_bundle_init(zval* bundle, const multisearch_needles_bundle_trie_ptr& trie)
 {
 	ZVAL_OBJ(bundle, needles_bundle_create_object(trie));
 }
