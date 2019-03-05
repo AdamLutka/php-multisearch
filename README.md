@@ -21,11 +21,12 @@ var_dump($hits[1]->getPosition());   // int(18)
 ```
 
 Consider following use case. You have file with relatively static set of terms which you want to search frequently. For example blacklist of words for user statuses on your social network. If you use php-fpm then most of the work is done only once during first request and all following requests during worker lifetime use datastructure from memory.
+**NeedlesBundleRepository isn't thread-safe.**
 
 ```
 <?php
-$loader = new MultiSearch\NeedlesBundleLoader();
-$needlesBundle = $loader->loadFromFile('file_with_strings.txt');
+$repository = MultiSearch\NeedlesBundleRepository::getInstance();
+$needlesBundle = $repository->fromFile('file_with_strings.txt');
 foreach ($needlesBundle->getNeedles() as $needle) {
 	var_dump($needle->getKey());
 }
