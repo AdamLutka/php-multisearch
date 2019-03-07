@@ -197,4 +197,10 @@ void multisearch_register_class_needles_bundle()
 	needles_bundle_object_handlers.free_obj = needles_bundle_object_free; /* This is the free handler */
 	needles_bundle_object_handlers.dtor_obj = needles_bundle_object_destroy; /* This is the dtor handler */
 	needles_bundle_object_handlers.offset = XtOffsetOf(needles_bundle_object, std); /* Here, we declare the offset to the engine */
+	needles_bundle_object_handlers.clone_obj = [](zval* object) {
+		needles_bundle_object *intern = Z_NB_OBJ_P(object);
+		auto trie = intern ? intern->trie : std::make_shared<multisearch_needles_bundle_trie>();
+
+		return needles_bundle_create_object(trie);
+	};
 }

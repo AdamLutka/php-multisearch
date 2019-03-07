@@ -39,6 +39,16 @@ $secondNeedlesBundle->insert('key');
 var_dump(count($needlesBundle->getNeedles()));
 var_dump(count($secondNeedlesBundle->getNeedles()));
 
+
+echo "\n";
+
+$thirdNeedlesBundle = clone $secondNeedlesBundle;
+$thirdNeedlesBundle->insert('third');
+
+var_dump(count($needlesBundle->getNeedles()));
+var_dump(count($secondNeedlesBundle->getNeedles()));
+var_dump(count($thirdNeedlesBundle->getNeedles()));
+
 --EXPECT--
 string(3) "ara"
 string(8) "ARA DATA"
@@ -77,3 +87,6 @@ int(9)
 int(4)
 int(1)
 
+int(4)
+int(1)
+int(2)
