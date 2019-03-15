@@ -14,6 +14,25 @@ using namespace multisearch::storage;
 zend_class_entry *multisearch_ce_needles_bundle_repository;
 
 
+void preload(const std::vector<std::string>& filepaths)
+{
+	for (auto& filepath : filepaths)
+	{
+		std::string canonicalized_filepath = trie_repository::canonicalize_filepath(filepath);
+		if (!canonicalized_filepath.empty())
+		{
+			auto modified = trie_repository::get_modified_time(canonicalized_filepath);
+			auto trie = load_trie(canonicalized_filepath);
+			if (trie)
+			{
+				trie->searchIn("");
+				trie_repository::set_trie(canonicalized_filepath, trie, modified);
+			}
+		}
+	}
+}
+
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_void, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
@@ -112,11 +131,13 @@ static zend_function_entry needles_bundle_repository_functions[] = {
 };
 
 
-void multisearch_register_class_needles_bundle_repository()
+void multisearch_register_class_needles_bundle_repository(const std::vector<std::string>& preload_filepaths)
 {
 	zend_class_entry tmp_ce;
 	INIT_CLASS_ENTRY(tmp_ce, ZEND_NS_NAME(MULTISEARCH_NS, "NeedlesBundleRepository"), needles_bundle_repository_functions);
 
 	multisearch_ce_needles_bundle_repository = zend_register_internal_class(&tmp_ce TSRMLS_CC);
 	zend_declare_property_null(multisearch_ce_needles_bundle_repository, "instance", sizeof("instance") - 1, ZEND_ACC_PRIVATE | ZEND_ACC_STATIC TSRMLS_CC);
+
+	preload(preload_filepaths);
 }

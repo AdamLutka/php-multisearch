@@ -59,7 +59,7 @@ Copy **build/output/multisearch.so** to extensions directory.
 Add extension to your PHP (enable in CLI, php-fpm or both).
 
 ```
-echo 'extension=multisearch.so' > /etc/php/7.1/mods-available/multisearch.ini
+cp config/multisearch.ini /etc/php/7.1/mods-available/
 ln -s -T /etc/php/7.1/mods-available/multisearch.ini /etc/php/7.1/cli/conf.d/30-multisearch.ini  # CLI
 ln -s -T /etc/php/7.1/mods-available/multisearch.ini /etc/php/7.1/fpm/conf.d/30-multisearch.ini  # php-fpm
 ```
@@ -69,3 +69,7 @@ Test that extension is loaded in CLI.
 ```
 php --ri multisearch
 ```
+
+### Configuration
+
+The extension configuration is inside [INI file](config/multisearch.ini).
