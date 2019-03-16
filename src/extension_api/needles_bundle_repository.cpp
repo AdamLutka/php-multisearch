@@ -18,15 +18,14 @@ void preload(const std::vector<std::string>& filepaths)
 {
 	for (auto& filepath : filepaths)
 	{
-		std::string canonicalized_filepath = trie_repository::canonicalize_filepath(filepath);
-		if (!canonicalized_filepath.empty())
+		auto file_info = trie_repository::get_file_info(filepath);
+		if (file_info)
 		{
-			auto modified = trie_repository::get_modified_time(canonicalized_filepath);
-			auto trie = load_trie(canonicalized_filepath);
+			auto trie = load_trie(filepath);
 			if (trie)
 			{
 				trie->searchIn("");
-				trie_repository::set_trie(canonicalized_filepath, trie, modified);
+				trie_repository::set_trie(file_info.identifier, trie, file_info.modified);
 			}
 		}
 	}
@@ -82,26 +81,25 @@ PHP_METHOD(NeedlesBundleRepository, fromFile)
 	
 
 	std::string filepath(fp, fp_len);
-	std::string canonicalized_filepath = trie_repository::canonicalize_filepath(filepath);
-	if (canonicalized_filepath.empty())
+
+	auto file_info = trie_repository::get_file_info(filepath);
+	if (!file_info)
 	{
 		zend_throw_exception_ex(multisearch_ce_exception, 0, "Invalid filepath: %s", filepath.c_str());
 		return;
 	}
 
-	auto modified = trie_repository::get_modified_time(canonicalized_filepath);
-	auto trie = trie_repository::get_trie(canonicalized_filepath, modified);
-
+	auto trie = trie_repository::get_trie(file_info.identifier, file_info.modified);
 	if (!trie)
 	{
-		trie = load_trie(canonicalized_filepath);
+		trie = load_trie(filepath);
 		if (!trie)
 		{
 			zend_throw_exception_ex(multisearch_ce_exception, 0, "File cannot be open: %s", filepath.c_str());
 			return;
 		}
 
-		trie_repository::set_trie(canonicalized_filepath, trie, modified);
+		trie_repository::set_trie(file_info.identifier, trie, file_info.modified);
 	}
 
 	multisearch_needles_bundle_init(return_value, trie);

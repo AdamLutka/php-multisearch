@@ -9,6 +9,7 @@ extern "C" {
 
 #include <string>
 #include <ctime>
+#include <sys/stat.h>
 
 
 namespace multisearch
@@ -17,12 +18,24 @@ namespace multisearch
 	{
 		namespace trie_repository
 		{
-			
-			std::time_t get_modified_time(const std::string& filepath);
-			std::string canonicalize_filepath(const std::string& filepath);
+			using file_identifier = std::pair<dev_t, ino_t>;
 
-			trie_ptr get_trie(const std::string& key, std::time_t validityStamp = 0);
-			void set_trie(const std::string& key, trie_ptr trie, std::time_t validityStamp = 0);
+			struct file_info
+			{
+				file_identifier identifier;
+				time_t modified;
+
+				operator bool()
+				{
+					return identifier.first > 0 && identifier.second > 0 && modified > 0;
+				}
+			};
+
+
+			file_info get_file_info(const std::string& filepath);
+
+			trie_ptr get_trie(const file_identifier& identifier, std::time_t validityStamp = 0);
+			void set_trie(const file_identifier& identifier, trie_ptr trie, std::time_t validityStamp = 0);
 
 			void remove_trie(trie_ptr trie);
 

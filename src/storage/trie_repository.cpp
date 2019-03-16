@@ -1,42 +1,42 @@
 #include "trie_repository.h"
 
 #include <map>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 
 using trie_ptr = multisearch::trie_ptr;
+using file_info = multisearch::storage::trie_repository::file_info;
+using file_identifier = multisearch::storage::trie_repository::file_identifier;
 
-std::map<std::string, std::pair<trie_ptr, std::time_t>> tries;
+std::map<file_identifier, std::pair<trie_ptr, std::time_t>> tries;
 
 
-std::time_t multisearch::storage::trie_repository::get_modified_time(const std::string& filepath)
+file_info multisearch::storage::trie_repository::get_file_info(const std::string& filepath)
 {
+	file_info info;
 	struct stat result;
+
 	if (stat(filepath.c_str(), &result) == 0)
 	{
-		return result.st_mtime;
+		info.identifier = file_identifier(result.st_dev, result.st_ino);
+		info.modified = result.st_mtime;
+	}
+	else
+	{
+		info.identifier = file_identifier(0, 0);
+		info.modified = 0;
 	}
 
-	return 0;
+	return info;
 }
 
-std::string multisearch::storage::trie_repository::canonicalize_filepath(const std::string& filepath)
+trie_ptr multisearch::storage::trie_repository::get_trie(const file_identifier& identifier, std::time_t validityStamp)
 {
-	char *canonical_filepath = realpath(filepath.c_str(), nullptr);
-	return canonical_filepath ? canonical_filepath : "";
-}
-
-
-trie_ptr multisearch::storage::trie_repository::get_trie(const std::string& key, std::time_t validityStamp)
-{
-	auto it = tries.find(key);
+	auto it = tries.find(identifier);
 	return it == tries.end() || it->second.second < validityStamp ? nullptr : it->second.first;
 }
 
-void multisearch::storage::trie_repository::set_trie(const std::string& key, trie_ptr trie, std::time_t validityStamp)
+void multisearch::storage::trie_repository::set_trie(const file_identifier& identifier, trie_ptr trie, std::time_t validityStamp)
 {
-	tries[key] = std::make_pair(trie, validityStamp);
+	tries[identifier] = std::make_pair(trie, validityStamp);
 }
 
 
