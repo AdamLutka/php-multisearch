@@ -26,8 +26,11 @@ void preload(const std::vector<std::string>& filepaths)
 			{
 				trie->searchIn("");
 				trie_repository::set_trie(file_info.identifier, trie, file_info.modified);
+				continue;
 			}
 		}
+
+		php_log_err(const_cast<char*>(("multisearch: needles preload failed " + filepath).c_str()));
 	}
 }
 
