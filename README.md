@@ -73,3 +73,17 @@ php --ri multisearch
 ### Configuration
 
 The extension configuration is inside [INI file](config/multisearch.ini).
+
+
+## Needles bundle file format
+
+Needles can be stored in a file like the following one:
+
+```
+key1	value1
+k\ne\ty\n2	va\nlu\te2
+key3
+key4	value4
+```
+
+Each line represents one needle. Everything from the begining of line to the first tab character is key (string that is searched in a haystack). The rest of line is value which can be omitted. You can use escape sequences **\t** and **\n** if key or value contain tab or new line character.
