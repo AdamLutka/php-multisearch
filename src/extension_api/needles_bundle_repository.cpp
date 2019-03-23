@@ -18,15 +18,18 @@ void preload(const std::vector<std::string>& filepaths)
 {
 	for (auto& filepath : filepaths)
 	{
-		auto file_info = trie_repository::get_file_info(filepath);
-		if (file_info)
+		if (php_check_open_basedir_ex(filepath.c_str(), 0) == 0)
 		{
-			auto trie = load_trie(filepath);
-			if (trie)
+			auto file_info = trie_repository::get_file_info(filepath);
+			if (file_info)
 			{
-				trie->searchIn("");
-				trie_repository::set_trie(file_info.identifier, trie, file_info.modified);
-				continue;
+				auto trie = load_trie(filepath);
+				if (trie)
+				{
+					trie->searchIn("");
+						trie_repository::set_trie(file_info.identifier, trie, file_info.modified);
+						continue;
+				}
 			}
 		}
 
@@ -84,6 +87,11 @@ PHP_METHOD(NeedlesBundleRepository, fromFile)
 	
 
 	std::string filepath(fp, fp_len);
+
+	if (!multisearch_check_open_basedir(filepath))
+	{
+		return;
+	}
 
 	auto file_info = trie_repository::get_file_info(filepath);
 	if (!file_info)

@@ -36,6 +36,11 @@ PHP_METHOD(NeedlesBundleLoader, loadFromFile)
 
 	std::string filepath(fp, fp_len);
 
+	if (!multisearch_check_open_basedir(filepath))
+	{
+		return;
+	}
+
 	auto trie = multisearch::storage::load_trie(filepath);
 	if (!trie)
 	{
