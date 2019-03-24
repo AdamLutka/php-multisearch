@@ -64,7 +64,7 @@ debian.stretch: debian.stretch.prepare debian.stretch.tests
 
 
 clean:
-	rm -rf src/*.o src/*/*.o src/.libs src/*/.libs src/*.lo src/*/*.lo build/output/*
+	rm -rf src/*.o src/*/*.o src/.libs src/*/.libs src/*.lo src/*/*.lo build/output/* tests/*/*.o tests/aho_corasick/aho_corasick_tests
 
 
 .PHONY: build
