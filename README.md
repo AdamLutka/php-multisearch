@@ -45,7 +45,7 @@ Build enviroment is prepared in [docker](https://docs.docker.com/install/). Mult
 Run make to build and run docker container which builds extension and also runs tests. Builded extension is placed in **build/output** directory.
 
 ```
-make
+make debian.stretch PHP_VERSION=7.1
 ```
 
 Find out where directory with extensions is located.
