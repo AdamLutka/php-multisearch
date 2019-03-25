@@ -2,7 +2,7 @@ CXX = g++
 COMPILER = ${CXX}
 LINKER = ${CXX}
 
-COMPILER_FLAGS = ${CFLAGS} -I ./include -I ../../src/aho_corasick -Wall -std=c++17 -c -o
+COMPILER_FLAGS = ${CFLAGS} -I ./include -I ../../src/aho_corasick -Wall -std=c++11 -c -o
 LINKER_FLAGS = ${LFLAGS}
 
 TEST_SOURCES = $(wildcard *.cpp)
