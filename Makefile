@@ -41,11 +41,14 @@ endef
 all:
 	@echo "Choose distribution:"
 	@echo "  - debian.stretch"
+	@echo "  - debian.jessie"
 
 
 debian.stretch: debian.stretch.prepare debian.stretch.tests
 	$(call msg_done)
 
+debian.jessie: debian.jessie.prepare debian.jessie.tests
+	$(call msg_done)
 
 %.prepare:
 	$(call docker_build,$*)
