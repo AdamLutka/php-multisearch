@@ -21,7 +21,7 @@ void multisearch_init_needle(zval* needle, const std::string& key, const std::st
 ZEND_BEGIN_ARG_INFO_EX(arginfo_void, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_construct, 0, 0, 2)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_construct, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, key, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, value, IS_STRING, 0)
 ZEND_END_ARG_INFO()
