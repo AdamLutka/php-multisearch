@@ -132,7 +132,7 @@ PHP_METHOD(NeedlesBundleRepository, dispose)
 }
 
 static zend_function_entry needles_bundle_repository_functions[] = {
-	PHP_ME(NeedlesBundleRepository, __construct, arginfo_void, ZEND_ACC_PUBLIC)
+	PHP_ME(NeedlesBundleRepository, __construct, arginfo_void, ZEND_ACC_PRIVATE)
 	PHP_ME(NeedlesBundleRepository, getInstance, arginfo_void, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
 	PHP_ME(NeedlesBundleRepository, fromFile, arginfo_fromFile, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundleRepository, dispose, arginfo_dispose, ZEND_ACC_PUBLIC)
