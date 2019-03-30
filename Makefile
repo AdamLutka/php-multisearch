@@ -36,6 +36,10 @@ define docker_run
 		"${CONTAINER_NAME}:$(1)-php${PHP_VERSION}" $(2)
 endef
 
+define print_extension_dir
+	php -r "echo ini_get('extension_dir');"
+endef
+
 
 # targets ===========================================================
 all:
@@ -65,6 +69,16 @@ debian.jessie: debian.jessie.prepare debian.jessie.tests
 %.tests.extension_api:
 	$(call docker_run,$*,test NO_INTERACTION=yes)
 
+
+install:
+	cp build/output/multisearch.so `$(call print_extension_dir)`
+	cp config/multisearch.ini /etc/php/${PHP_VERSION}/mods-available/
+	phpenmod multisearch
+
+purge:
+	phpdismod multisearch
+	rm -f /etc/php/${PHP_VERSION}/mods-available/multisearch.ini
+	rm -f `$(call print_extension_dir)`/multisearch.so
 
 clean:
 	rm -rf src/*.o src/*/*.o src/.libs src/*/.libs src/*.lo src/*/*.lo build/output/* tests/*/*.o tests/aho_corasick/aho_corasick_tests

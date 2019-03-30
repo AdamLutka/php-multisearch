@@ -48,20 +48,10 @@ Run make to build and run docker container which builds extension and also runs 
 make debian.stretch PHP_VERSION=7.1
 ```
 
-Find out where directory with extensions is located.
+Run make to install builded extension. **You have to be root or use sudo** and PHP of specified version has to be installed.
 
 ```
-php -i | grep extension_dir
-```
-
-Copy **build/output/multisearch.so** to extensions directory.
-
-Add extension to your PHP (enable in CLI, php-fpm or both).
-
-```
-cp config/multisearch.ini /etc/php/7.1/mods-available/
-ln -s -T /etc/php/7.1/mods-available/multisearch.ini /etc/php/7.1/cli/conf.d/30-multisearch.ini  # CLI
-ln -s -T /etc/php/7.1/mods-available/multisearch.ini /etc/php/7.1/fpm/conf.d/30-multisearch.ini  # php-fpm
+make install PHP_VERSION=7.1
 ```
 
 Test that extension is loaded in CLI.
