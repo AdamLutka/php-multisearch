@@ -1,5 +1,5 @@
 --TEST--
-Tests needles bundle loader respects open_basedir
+Tests needles bundle loader - respects open_basedir
 --INI--
 open_basedir=/var/
 --FILE--

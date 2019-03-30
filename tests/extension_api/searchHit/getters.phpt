@@ -1,10 +1,13 @@
 --TEST--
-Tests search hit
+Tests search hit - getters
 --FILE--
 <?php
 declare(strict_types=1);
 
-$searchHit = new MultiSearch\SearchHit(10, 'key', 'value');
+use MultiSearch\SearchHit;
+
+
+$searchHit = new SearchHit(10, 'key', 'value');
 
 var_dump($searchHit->getPosition());
 var_dump($searchHit->getKey());

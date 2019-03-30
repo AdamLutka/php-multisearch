@@ -1,18 +1,19 @@
 --TEST--
-Tests needles bundle repository
+Tests needles bundle repository - fromFile
 --FILE--
 <?php
 declare(strict_types=1);
 
-define('FIXTURE_SOURCE_FILEPATH', __DIR__ . '/needlesBundleRepository.fixture');
+use MultiSearch\NeedlesBundleRepository;
+
+define('FIXTURE_SOURCE_FILEPATH', __DIR__ . '/_fixture.txt');
 define('FIXTURE_FILEPATH', FIXTURE_SOURCE_FILEPATH . '.tmp');
 
 copy(FIXTURE_SOURCE_FILEPATH, FIXTURE_FILEPATH);
 touch(FIXTURE_FILEPATH, filemtime(FIXTURE_SOURCE_FILEPATH));
 
 
-
-$repository = MultiSearch\NeedlesBundleRepository::getInstance();
+$repository = NeedlesBundleRepository::getInstance();
 try {
 	$repository->fromFile(FIXTURE_FILEPATH . '.notExists');
 }
@@ -51,14 +52,6 @@ var_dump(count($needlesBundle1->getNeedles()));
 var_dump(count($needlesBundle2->getNeedles()));
 var_dump(count($needlesBundle3->getNeedles()));
 
-echo "\n";
-
-$repository->dispose($needlesBundle1);
-
-var_dump(count($needlesBundle1->getNeedles()));
-var_dump(count($needlesBundle2->getNeedles()));
-var_dump(count($needlesBundle3->getNeedles()));
-
 
 unlink(FIXTURE_FILEPATH);
 
@@ -84,9 +77,5 @@ string(4) "key3"
 string(6) "value3"
 
 int(2)
-int(3)
-int(3)
-
-int(0)
 int(3)
 int(3)

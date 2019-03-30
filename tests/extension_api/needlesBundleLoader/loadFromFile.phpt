@@ -1,13 +1,15 @@
 --TEST--
-Tests needles bundle loader
+Tests needles bundle loader - loadFromFile
 --FILE--
 <?php
 declare(strict_types=1);
 
-define('FIXTURE_FILEPATH', __DIR__ . '/needlesBundleLoader.fixture');
+use MultiSearch\NeedlesBundleLoader;
+
+define('FIXTURE_FILEPATH', __DIR__ . '/_fixture.txt');
 
 
-$loader = new MultiSearch\NeedlesBundleLoader();
+$loader = new NeedlesBundleLoader();
 try {
 	$loader->loadFromFile(FIXTURE_FILEPATH . '.notExists');
 }

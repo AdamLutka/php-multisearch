@@ -1,10 +1,12 @@
 --TEST--
-Tests needle
+Tests needle - getters
 --FILE--
 <?php
 declare(strict_types=1);
 
-$needle = new MultiSearch\Needle('key', 'value');
+use MultiSearch\Needle;
+
+$needle = new Needle('key', 'value');
 
 var_dump($needle->getKey());
 var_dump($needle->getValue());
