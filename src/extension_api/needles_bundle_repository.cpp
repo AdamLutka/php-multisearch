@@ -61,12 +61,17 @@ PHP_METHOD(NeedlesBundleRepository, __construct)
 PHP_METHOD(NeedlesBundleRepository, getInstance)
 {
 	zval *zvalue;
-	
+
 	ZEND_PARSE_PARAMETERS_START(0, 0)
 	ZEND_PARSE_PARAMETERS_END();
 
 
 	zvalue = zend_read_static_property(multisearch_ce_needles_bundle_repository, "instance", sizeof("instance") - 1, 0);
+	if (Z_TYPE_P(zvalue) == IS_REFERENCE)
+	{
+		zvalue = Z_REFVAL_P(zvalue);
+	}
+
 	if (Z_TYPE_P(zvalue) == IS_NULL)
 	{
 		object_init_ex(zvalue, multisearch_ce_needles_bundle_repository);
