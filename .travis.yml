@@ -1,0 +1,28 @@
+services:
+        - docker
+
+matrix:
+        include:
+                - env:
+                        - PHP_VERSION=7.1
+                        - MAKE_TARGET=debian.jessie
+                - env:
+                        - PHP_VERSION=7.2
+                        - MAKE_TARGET=debian.jessie
+                - env:
+                        - PHP_VERSION=7.3
+                        - MAKE_TARGET=debian.jessie
+                - env:
+                        - PHP_VERSION=7.1
+                        - MAKE_TARGET=debian.stretch
+                - env:
+                        - PHP_VERSION=7.2
+                        - MAKE_TARGET=debian.stretch
+                - env:
+                        - PHP_VERSION=7.3
+                        - MAKE_TARGET=debian.stretch
+
+
+script:
+        - make $MAKE_TARGET
+

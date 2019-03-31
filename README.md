@@ -1,4 +1,4 @@
-# PHP-multisearch
+# PHP-multisearch <img src="https://travis-ci.com/AdamLutka/php-multisearch.svg?branch=master" alt="build:">
 
 PHP 7 extension which enables efficient multiple strings search. It uses [Aho-Corasick algorithm](https://en.wikipedia.org/wiki/Aho%E2%80%93Corasick_algorithm) so the time complexity of the algorithm is linear in the length of the strings plus the length of the searched text plus the number of output matches.
 

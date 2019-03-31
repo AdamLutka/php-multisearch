@@ -21,7 +21,7 @@ endef
 define docker_build
 	docker build \
 		--tag "${CONTAINER_NAME}:$(1)-php${PHP_VERSION}" \
-		-f build/dockerfiles/$(1).dockerfile \
+		-f build/context/dockerfiles/$(1).dockerfile \
 		--build-arg WORKSPACE_DIR=${WORKSPACE_DIR} \
 		--build-arg PHP_VERSION=${PHP_VERSION} \
 		build/context
