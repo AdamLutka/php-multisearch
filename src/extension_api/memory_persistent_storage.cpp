@@ -12,7 +12,7 @@
 
 using namespace multisearch::storage;
 
-
+zend_object_handlers memory_persistent_storage_object_handlers;
 zend_class_entry *multisearch_ce_memory_persistent_storage;
 
 
@@ -204,8 +204,22 @@ void multisearch_register_class_memory_persistent_storage(const std::vector<std:
 
 	multisearch_ce_memory_persistent_storage = zend_register_internal_class(&tmp_ce TSRMLS_CC);
 	multisearch_ce_memory_persistent_storage->ce_flags |= ZEND_ACC_FINAL;
+	multisearch_ce_memory_persistent_storage->create_object = [](zend_class_entry *ce) {
+		zend_object *obj = zend_objects_new(ce);
+
+		obj->handlers = &memory_persistent_storage_object_handlers;
+
+		return obj;
+	};
 	
 	zend_declare_property_null(multisearch_ce_memory_persistent_storage, "instance", sizeof("instance") - 1, ZEND_ACC_PRIVATE | ZEND_ACC_STATIC TSRMLS_CC);
+
+	memcpy(&memory_persistent_storage_object_handlers, zend_get_std_object_handlers(), sizeof(memory_persistent_storage_object_handlers));
+
+	memory_persistent_storage_object_handlers.clone_obj = [](zval* object) {
+		zend_throw_exception_ex(multisearch_ce_exception, 0, "MemoryPersistentStorage cannot be cloned.");
+		return Z_OBJ_P(object);
+	};
 
 	preload(needles_bundle_filepaths);
 }
