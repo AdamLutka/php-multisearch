@@ -21,18 +21,28 @@ var_dump($hits[1]->getPosition());   // int(18)
 ```
 
 Consider following use case. You have file with relatively static set of terms which you want to search frequently. For example blacklist of words for user statuses on your social network. If you use php-fpm then most of the work is done only once during first request and all following requests during worker lifetime use datastructure from memory.
-**PHP-multisearch isn't thread-safe.**
 
 ```
 <?php
-$repository = MultiSearch\NeedlesBundleRepository::getInstance();
-$needlesBundle = $repository->fromFile('file_with_strings.txt');
+$filepath = '/etc/passwd';
+$storage = MultiSearch\MemoryPersistentStorage::getInstance();
+
+if (!$storage->hasNeedlesBundle($filepath)) {
+	$loader = new MultiSearch\NeedlesBundleLoader();
+	$needlesBundle = $loader->loadFromFile($filepath);
+	$storage->setNeedlesBundle($filepath, $needlesBundle);
+} else {
+	$needlesBundle = $storage->getNeedlesBundle($filepath);
+}
+
 foreach ($needlesBundle->getNeedles() as $needle) {
 	var_dump($needle->getKey());
 }
 ```
 
 You can see more examples in [tests](tests/extension_api/) or see [API reference](https://github.com/AdamLutka/php-multisearch-api).
+
+**PHP-multisearch isn't thread-safe.**
 
 ## Getting Started
 

@@ -3,7 +3,7 @@
 #include "extension_api/search_hit.h"
 #include "extension_api/needles_bundle.h"
 #include "extension_api/needles_bundle_loader.h"
-#include "extension_api/needles_bundle_repository.h"
+#include "extension_api/memory_persistent_storage.h"
 #include "extension_api/multisearch_exception.h"
 
 #include <sstream>
@@ -42,7 +42,7 @@ PHP_MINIT_FUNCTION(multisearch)
 	multisearch_register_class_search_hit();
 	multisearch_register_class_needles_bundle();
 	multisearch_register_class_needles_bundle_loader();
-	multisearch_register_class_needles_bundle_repository(ini_parse_array(INI_STR(preload_key)));
+	multisearch_register_class_memory_persistent_storage(ini_parse_array(INI_STR(preload_key)));
 	multisearch_register_class_exception();
 
 	return SUCCESS;

@@ -1,12 +1,12 @@
 #include "trie_repository.h"
 
 #include <map>
+#include <sstream>
 
 using trie_ptr = multisearch::trie_ptr;
 using file_info = multisearch::storage::trie_repository::file_info;
-using file_identifier = multisearch::storage::trie_repository::file_identifier;
 
-std::map<file_identifier, std::pair<trie_ptr, std::time_t>> tries;
+std::map<std::string, std::pair<trie_ptr, std::time_t>> tries;
 
 
 file_info multisearch::storage::trie_repository::get_file_info(const std::string& filepath)
@@ -28,26 +28,26 @@ file_info multisearch::storage::trie_repository::get_file_info(const std::string
 	return info;
 }
 
-trie_ptr multisearch::storage::trie_repository::get_trie(const file_identifier& identifier, std::time_t validityStamp)
+trie_ptr multisearch::storage::trie_repository::get_trie(const std::string& identifier, std::time_t validityStamp)
 {
 	auto it = tries.find(identifier);
 	return it == tries.end() || it->second.second < validityStamp ? nullptr : it->second.first;
 }
 
-void multisearch::storage::trie_repository::set_trie(const file_identifier& identifier, trie_ptr trie, std::time_t validityStamp)
+void multisearch::storage::trie_repository::set_trie(const std::string& identifier, trie_ptr trie, std::time_t validityStamp)
 {
 	tries[identifier] = std::make_pair(trie, validityStamp);
 }
 
-
-void multisearch::storage::trie_repository::remove_trie(trie_ptr trie)
+void multisearch::storage::trie_repository::set_trie(const file_identifier& identifier, trie_ptr trie, std::time_t validityStamp)
 {
-	for (auto it = tries.begin(); it != tries.end(); ++it)
-	{
-		if (it->second.first == trie)
-		{
-			tries.erase(it);
-			break;
-		}
-	}
+	std::stringstream ss;
+	ss << identifier.first << '-' << identifier.second;
+	multisearch::storage::trie_repository::set_trie(ss.str(), trie, validityStamp);
+}
+
+
+bool multisearch::storage::trie_repository::remove_trie(const std::string& identifier)
+{
+	return tries.erase(identifier) > 0;
 }

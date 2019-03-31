@@ -34,10 +34,11 @@ namespace multisearch
 
 			file_info get_file_info(const std::string& filepath);
 
-			trie_ptr get_trie(const file_identifier& identifier, std::time_t validityStamp = 0);
+			trie_ptr get_trie(const std::string& identifier, std::time_t validityStamp = 0);
+			void set_trie(const std::string& identifier, trie_ptr trie, std::time_t validityStamp = 0);
 			void set_trie(const file_identifier& identifier, trie_ptr trie, std::time_t validityStamp = 0);
 
-			void remove_trie(trie_ptr trie);
+			bool remove_trie(const std::string& identifier);
 
 		}
 	}
