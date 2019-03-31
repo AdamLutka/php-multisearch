@@ -1,6 +1,7 @@
 #include "memory_persistent_storage.h"
 #include "common.h"
 #include "needles_bundle.h"
+#include "needles_bundle_storage_interface.h"
 #include "multisearch_exception.h"
 #include "../storage/trie_file_loader.h"
 #include "../storage/trie_repository.h"
@@ -220,6 +221,8 @@ void multisearch_register_class_memory_persistent_storage(const std::vector<std:
 		zend_throw_exception_ex(multisearch_ce_exception, 0, "MemoryPersistentStorage cannot be cloned.");
 		return Z_OBJ_P(object);
 	};
+
+	zend_class_implements(multisearch_ce_memory_persistent_storage TSRMLS_CC, 1, multisearch_ce_needles_bundle_storage_interface);
 
 	preload(needles_bundle_filepaths);
 }
