@@ -25,12 +25,12 @@ static inline needles_bundle_object *php_needles_bundle_from_obj(zend_object *ob
 zend_class_entry *multisearch_ce_needles_bundle;
 
 
-static zend_object *needles_bundle_create_object(const multisearch_needles_bundle_trie_ptr& trie)
+static zend_object *needles_bundle_create_object(const multisearch_needles_bundle_trie_ptr& trie, zend_class_entry *ce)
 {
 	needles_bundle_object *intern = (needles_bundle_object*)ecalloc(1, sizeof(needles_bundle_object));
 
-	zend_object_std_init(&intern->std, multisearch_ce_needles_bundle TSRMLS_CC);
-	object_properties_init(&intern->std, multisearch_ce_needles_bundle);
+	zend_object_std_init(&intern->std, ce TSRMLS_CC);
+	object_properties_init(&intern->std, ce);
 
 	intern->std.handlers = &needles_bundle_object_handlers;
 
@@ -42,7 +42,7 @@ static zend_object *needles_bundle_create_object(const multisearch_needles_bundl
 
 void multisearch_needles_bundle_init(zval* bundle, const multisearch_needles_bundle_trie_ptr& trie)
 {
-	ZVAL_OBJ(bundle, needles_bundle_create_object(trie));
+	ZVAL_OBJ(bundle, needles_bundle_create_object(trie, multisearch_ce_needles_bundle));
 }
 
 multisearch_needles_bundle_trie_ptr multisearch_needles_bundle_dispose(zval* bundle)
@@ -189,7 +189,7 @@ void multisearch_register_class_needles_bundle()
 
 	multisearch_ce_needles_bundle = zend_register_internal_class(&tmp_ce TSRMLS_CC);
 	multisearch_ce_needles_bundle->create_object = [](zend_class_entry *ce) {
-		return needles_bundle_create_object(std::make_shared<multisearch_needles_bundle_trie>());
+		return needles_bundle_create_object(std::make_shared<multisearch_needles_bundle_trie>(), ce);
 	};
 
 	memcpy(&needles_bundle_object_handlers, zend_get_std_object_handlers(), sizeof(needles_bundle_object_handlers));
@@ -200,7 +200,10 @@ void multisearch_register_class_needles_bundle()
 	needles_bundle_object_handlers.clone_obj = [](zval* object) {
 		needles_bundle_object *intern = Z_NB_OBJ_P(object);
 		auto trie = intern ? intern->trie : std::make_shared<multisearch_needles_bundle_trie>();
+		auto new_bundle = needles_bundle_create_object(trie, intern->std.ce);
 
-		return needles_bundle_create_object(trie);
+		zend_objects_clone_members(new_bundle, Z_OBJ_P(object));
+
+		return new_bundle;
 	};
 }
