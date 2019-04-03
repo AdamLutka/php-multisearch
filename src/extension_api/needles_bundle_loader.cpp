@@ -1,6 +1,7 @@
 #include "needles_bundle_loader.h"
 #include "common.h"
 #include "needles_bundle.h"
+#include "needles_bundle_loader_interface.h"
 #include "multisearch_exception.h"
 #include "../storage/trie_file_loader.h"
 
@@ -64,4 +65,6 @@ void multisearch_register_class_needles_bundle_loader()
 	INIT_CLASS_ENTRY(tmp_ce, ZEND_NS_NAME(MULTISEARCH_NS, "NeedlesBundleLoader"), needles_bundle_loader_functions);
 
 	multisearch_ce_needles_bundle_loader = zend_register_internal_class(&tmp_ce TSRMLS_CC);
+
+	zend_class_implements(multisearch_ce_needles_bundle_loader TSRMLS_CC, 1, multisearch_ce_needles_bundle_loader_interface);
 }
