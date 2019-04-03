@@ -66,6 +66,33 @@ static void needles_bundle_object_free(zend_object *object)
 	zend_object_std_dtor(object); /* call Zend's free handler, which will free object properties */
 }
 
+static HashTable* needles_bundle_object_get_debug_info(zval *object, int *is_temp)
+{
+	HashTable *ht;
+	zval pairs;
+
+	*is_temp = 1;
+	array_init(&pairs);
+
+	needles_bundle_object *intern = Z_NB_OBJ_P(object);
+	if (intern && intern->trie)
+	{
+		for (auto& needle : *intern->trie)
+		{
+			auto& key = needle.getKey();
+			auto& value = needle.getValue();
+
+			add_assoc_string(&pairs, key.c_str(), (char*)value.c_str());
+		}
+	}
+
+	ALLOC_HASHTABLE(ht);
+	zend_hash_init(ht, 1, NULL, ZVAL_PTR_DTOR, 0);
+	zend_hash_str_update(ht, "pairs", sizeof("pairs") - 1, &pairs);
+
+	return ht;
+}
+
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_void, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -189,6 +216,7 @@ void multisearch_register_class_needles_bundle()
 
 	needles_bundle_object_handlers.free_obj = needles_bundle_object_free; /* This is the free handler */
 	needles_bundle_object_handlers.dtor_obj = needles_bundle_object_destroy; /* This is the dtor handler */
+	needles_bundle_object_handlers.get_debug_info = needles_bundle_object_get_debug_info;
 	needles_bundle_object_handlers.offset = XtOffsetOf(needles_bundle_object, std); /* Here, we declare the offset to the engine */
 	needles_bundle_object_handlers.clone_obj = [](zval* object) {
 		needles_bundle_object *intern = Z_NB_OBJ_P(object);
