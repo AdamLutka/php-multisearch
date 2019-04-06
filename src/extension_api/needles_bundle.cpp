@@ -94,17 +94,20 @@ static HashTable* needles_bundle_object_get_debug_info(zval *object, int *is_tem
 }
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_void, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_construct, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_insert, 0, 0, 1)
+MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_insert, 0, 1, IS_VOID, 0)
 	MULTISEARCH_ARG_TYPE_INFO(0, key, IS_STRING, 0)
 	MULTISEARCH_ARG_TYPE_INFO(0, value, IS_STRING, 0)
-ZEND_END_ARG_INFO()
+MULTISEARCH_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_searchIn, 0, 0, 1)
+MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_getNeedles, 0, 0, IS_ARRAY, 0)
+MULTISEARCH_END_ARG_INFO()
+
+MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_searchIn, 0, 1, IS_ARRAY, 0)
 	MULTISEARCH_ARG_TYPE_INFO(0, haystack, IS_STRING, 0)
-ZEND_END_ARG_INFO()
+MULTISEARCH_END_ARG_INFO()
 
 
 PHP_METHOD(NeedlesBundle, __construct)
@@ -194,9 +197,9 @@ PHP_METHOD(NeedlesBundle, searchIn)
 }
 
 static zend_function_entry needles_bundle_functions[] = {
-	PHP_ME(NeedlesBundle, __construct, arginfo_void, ZEND_ACC_PUBLIC)
+	PHP_ME(NeedlesBundle, __construct, arginfo_construct, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundle, insert, arginfo_insert, ZEND_ACC_PUBLIC)
-	PHP_ME(NeedlesBundle, getNeedles, arginfo_void, ZEND_ACC_PUBLIC)
+	PHP_ME(NeedlesBundle, getNeedles, arginfo_getNeedles, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundle, searchIn, arginfo_searchIn, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

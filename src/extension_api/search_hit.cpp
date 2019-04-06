@@ -19,14 +19,20 @@ void multisearch_init_search_hit(zval* hit, const std::string& key, const std::s
 }
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_void, 0, 0, 0)
-ZEND_END_ARG_INFO()
-
 ZEND_BEGIN_ARG_INFO_EX(arginfo_construct, 0, 0, 2)
 	MULTISEARCH_ARG_TYPE_INFO(0, position, IS_LONG, 0)
 	MULTISEARCH_ARG_TYPE_INFO(0, key, IS_STRING, 0)
 	MULTISEARCH_ARG_TYPE_INFO(0, value, IS_STRING, 0)
 ZEND_END_ARG_INFO()
+
+MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_getPosition, 0, 0, IS_LONG, 0)
+MULTISEARCH_END_ARG_INFO()
+
+MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_getKey, 0, 0, IS_STRING, 0)
+MULTISEARCH_END_ARG_INFO()
+
+MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_getValue, 0, 0, IS_STRING, 0)
+MULTISEARCH_END_ARG_INFO()
 
 
 PHP_METHOD(SearchHit, __construct)
@@ -90,9 +96,9 @@ PHP_METHOD(SearchHit, getValue)
 
 static zend_function_entry search_hit_functions[] = {
 	PHP_ME(SearchHit, __construct, arginfo_construct, ZEND_ACC_PUBLIC)
-	PHP_ME(SearchHit, getPosition, arginfo_void, ZEND_ACC_PUBLIC)
-	PHP_ME(SearchHit, getKey, arginfo_void, ZEND_ACC_PUBLIC)
-	PHP_ME(SearchHit, getValue, arginfo_void, ZEND_ACC_PUBLIC)
+	PHP_ME(SearchHit, getPosition, arginfo_getPosition, ZEND_ACC_PUBLIC)
+	PHP_ME(SearchHit, getKey, arginfo_getKey, ZEND_ACC_PUBLIC)
+	PHP_ME(SearchHit, getValue, arginfo_getValue, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
 

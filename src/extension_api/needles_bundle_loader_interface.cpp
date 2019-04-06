@@ -4,9 +4,9 @@
 zend_class_entry *multisearch_ce_needles_bundle_loader_interface;
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_loadFromFile, 0, 0, 1)
+MULTISEARCH_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_loadFromFile, 0, 1, MULTISEARCH_CLASSNAME(NeedlesBundle), 0)
 	MULTISEARCH_ARG_TYPE_INFO(0, filepath, IS_STRING, 0)
-ZEND_END_ARG_INFO()
+MULTISEARCH_END_ARG_INFO()
 
 
 static zend_function_entry needles_bundle_loader_interface_functions[] = {

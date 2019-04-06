@@ -5,25 +5,25 @@
 zend_class_entry *multisearch_ce_needles_bundle_storage_interface;
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_setNeedlesBundle, 0, 0, 2)
+MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_setNeedlesBundle, 0, 2, IS_VOID, 0)
 	MULTISEARCH_ARG_TYPE_INFO(0, name, IS_STRING, 0)
 	MULTISEARCH_ARG_OBJ_INFO(0, needlesBundle, MULTISEARCH_CLASSNAME(NeedlesBundle), 0)
 	MULTISEARCH_ARG_TYPE_INFO(0, validityStamp, IS_LONG, 0)
-ZEND_END_ARG_INFO()
+MULTISEARCH_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_getNeedlesBundle, 0, 0, 1)
+MULTISEARCH_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_getNeedlesBundle, 0, 1, MULTISEARCH_CLASSNAME(NeedlesBundle), 0)
 	MULTISEARCH_ARG_TYPE_INFO(0, name, IS_STRING, 0)
 	MULTISEARCH_ARG_TYPE_INFO(0, validityStamp, IS_LONG, 0)
-ZEND_END_ARG_INFO()
+MULTISEARCH_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_hasNeedlesBundle, 0, 0, 1)
+MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_hasNeedlesBundle, 0, 1, _IS_BOOL, 0)
 	MULTISEARCH_ARG_TYPE_INFO(0, name, IS_STRING, 0)
 	MULTISEARCH_ARG_TYPE_INFO(0, validityStamp, IS_LONG, 0)
-ZEND_END_ARG_INFO()
+MULTISEARCH_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_removeNeedlesBundle, 0, 0, 1)
+MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_removeNeedlesBundle, 0, 1, IS_VOID, 0)
 	MULTISEARCH_ARG_TYPE_INFO(0, name, IS_STRING, 0)
-ZEND_END_ARG_INFO()
+MULTISEARCH_END_ARG_INFO()
 
 
 static zend_function_entry needles_bundle_storage_interface_functions[] = {
