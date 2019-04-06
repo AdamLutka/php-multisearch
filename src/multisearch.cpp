@@ -30,7 +30,7 @@ std::vector<std::string> ini_parse_array(const std::string& value)
 
 
 PHP_INI_BEGIN()
-	PHP_INI_ENTRY("multisearch.needles.preload", "", PHP_INI_PERDIR, NULL)
+	PHP_INI_ENTRY("multisearch.needles.preload", "", PHP_INI_SYSTEM, NULL)
 PHP_INI_END()
 
 
