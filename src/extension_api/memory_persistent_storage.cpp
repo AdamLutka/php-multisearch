@@ -51,23 +51,23 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_void, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_setNeedlesBundle, 0, 0, 2)
-	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
-	MULTISEARCH_ARG_OBJ_INFO(0, needlesBundle, NeedlesBundle, 0)
-	ZEND_ARG_TYPE_INFO(0, validityStamp, IS_LONG, 0)
+	MULTISEARCH_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+	MULTISEARCH_ARG_OBJ_INFO(0, needlesBundle, MULTISEARCH_CLASSNAME(NeedlesBundle), 0)
+	MULTISEARCH_ARG_TYPE_INFO(0, validityStamp, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_getNeedlesBundle, 0, 0, 1)
-	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, validityStamp, IS_LONG, 0)
+	MULTISEARCH_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+	MULTISEARCH_ARG_TYPE_INFO(0, validityStamp, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_hasNeedlesBundle, 0, 0, 1)
-	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, validityStamp, IS_LONG, 0)
+	MULTISEARCH_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+	MULTISEARCH_ARG_TYPE_INFO(0, validityStamp, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_removeNeedlesBundle, 0, 0, 1)
-	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+	MULTISEARCH_ARG_TYPE_INFO(0, name, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 
@@ -201,7 +201,7 @@ static zend_function_entry memory_persistent_storage_functions[] = {
 void multisearch_register_class_memory_persistent_storage(const std::vector<std::string>& needles_bundle_filepaths)
 {
 	zend_class_entry tmp_ce;
-	INIT_CLASS_ENTRY(tmp_ce, ZEND_NS_NAME(MULTISEARCH_NS, "MemoryPersistentStorage"), memory_persistent_storage_functions);
+	INIT_CLASS_ENTRY(tmp_ce, MULTISEARCH_CLASSNAME_STR(MemoryPersistentStorage), memory_persistent_storage_functions);
 
 	multisearch_ce_memory_persistent_storage = zend_register_internal_class(&tmp_ce TSRMLS_CC);
 	multisearch_ce_memory_persistent_storage->ce_flags |= ZEND_ACC_FINAL;

@@ -98,12 +98,12 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_void, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_insert, 0, 0, 1)
-	ZEND_ARG_TYPE_INFO(0, key, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, value, IS_STRING, 0)
+	MULTISEARCH_ARG_TYPE_INFO(0, key, IS_STRING, 0)
+	MULTISEARCH_ARG_TYPE_INFO(0, value, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_searchIn, 0, 0, 1)
-	ZEND_ARG_TYPE_INFO(0, haystack, IS_STRING, 0)
+	MULTISEARCH_ARG_TYPE_INFO(0, haystack, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 
@@ -205,7 +205,7 @@ static zend_function_entry needles_bundle_functions[] = {
 void multisearch_register_class_needles_bundle()
 {
 	zend_class_entry tmp_ce;
-	INIT_CLASS_ENTRY(tmp_ce, ZEND_NS_NAME(MULTISEARCH_NS, "NeedlesBundle"), needles_bundle_functions);
+	INIT_CLASS_ENTRY(tmp_ce, MULTISEARCH_CLASSNAME_STR(NeedlesBundle), needles_bundle_functions);
 
 	multisearch_ce_needles_bundle = zend_register_internal_class(&tmp_ce TSRMLS_CC);
 	multisearch_ce_needles_bundle->create_object = [](zend_class_entry *ce) {

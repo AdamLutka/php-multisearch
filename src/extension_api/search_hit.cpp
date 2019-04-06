@@ -23,9 +23,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_void, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_construct, 0, 0, 2)
-	ZEND_ARG_TYPE_INFO(0, position, IS_LONG, 0)
-	ZEND_ARG_TYPE_INFO(0, key, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, value, IS_STRING, 0)
+	MULTISEARCH_ARG_TYPE_INFO(0, position, IS_LONG, 0)
+	MULTISEARCH_ARG_TYPE_INFO(0, key, IS_STRING, 0)
+	MULTISEARCH_ARG_TYPE_INFO(0, value, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 
@@ -100,7 +100,7 @@ static zend_function_entry search_hit_functions[] = {
 void multisearch_register_class_search_hit()
 {
 	zend_class_entry tmp_ce;
-	INIT_CLASS_ENTRY(tmp_ce, ZEND_NS_NAME(MULTISEARCH_NS, "SearchHit"), search_hit_functions);
+	INIT_CLASS_ENTRY(tmp_ce, MULTISEARCH_CLASSNAME_STR(SearchHit), search_hit_functions);
 
 	multisearch_ce_search_hit = zend_register_internal_class(&tmp_ce TSRMLS_CC);
 	zend_declare_property_null(multisearch_ce_search_hit, "position", sizeof("position") - 1, ZEND_ACC_PRIVATE TSRMLS_CC);

@@ -15,7 +15,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_void, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_loadFromFile, 0, 0, 1)
-	ZEND_ARG_TYPE_INFO(0, filepath, IS_STRING, 0)
+	MULTISEARCH_ARG_TYPE_INFO(0, filepath, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 
@@ -62,7 +62,7 @@ static zend_function_entry needles_bundle_loader_functions[] = {
 void multisearch_register_class_needles_bundle_loader()
 {
 	zend_class_entry tmp_ce;
-	INIT_CLASS_ENTRY(tmp_ce, ZEND_NS_NAME(MULTISEARCH_NS, "NeedlesBundleLoader"), needles_bundle_loader_functions);
+	INIT_CLASS_ENTRY(tmp_ce, MULTISEARCH_CLASSNAME_STR(NeedlesBundleLoader), needles_bundle_loader_functions);
 
 	multisearch_ce_needles_bundle_loader = zend_register_internal_class(&tmp_ce TSRMLS_CC);
 
