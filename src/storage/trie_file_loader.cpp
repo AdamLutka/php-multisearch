@@ -4,25 +4,15 @@
 #include <memory>
 
 
-void replaceInString(std::string& subject, const std::string& search, const std::string& replace)
-{
-	std::size_t pos = 0;
-	while ((pos = subject.find(search, pos)) != std::string::npos)
-	{
-		subject.replace(pos, search.length(), replace);
-		pos += replace.length();
-	}
-}
-
 multisearch::trie_ptr multisearch::storage::load_trie(std::string filepath)
 {
-	auto trie = std::make_shared<multisearch::trie>();
-
 	std::ifstream file(filepath);
 	if (!file.is_open())
 	{
 		return nullptr;
 	}
+
+	auto trie = std::make_shared<multisearch::trie>();
 
 	std::string line;
 	while (std::getline(file, line))
@@ -32,24 +22,40 @@ multisearch::trie_ptr multisearch::storage::load_trie(std::string filepath)
 			continue;
 		}
 
-		auto offset = line.find('\t');
-		std::string key, value;
-		if (std::string::npos == offset)
+		std::size_t s, d, separator_index = std::string::npos;
+		for (s = 0, d = 0; s < line.size() && d < line.size(); ++s, ++d)
 		{
-			key = line;
-		}
-		else
-		{
-			key = line.substr(0, offset);
-			value = offset >= line.size() - 1 ? "" : line.substr(offset + 1, line.size());
-		}
-		
-		replaceInString(key, "\\n", "\n");
-		replaceInString(key, "\\t", "\t");
-		replaceInString(value, "\\n", "\n");
-		replaceInString(value, "\\t", "\t");
+			if (line[s] == '\t' && separator_index == std::string::npos)
+			{
+				separator_index = d;
+			}
 
-		trie->insert(key, value);
+			if (line[s] == '\\' && line[s + 1] == 't')
+			{
+				line[d] = '\t';
+				++s;
+			}
+			else if (line[s] == '\\' && line[s + 1] == 'n')
+			{
+				line[d] = '\n';
+				++s;
+			}
+			else if (d != s)
+			{
+				line[d] = line[s];
+			}
+		}
+
+		line.resize(d);
+
+		std::string value;
+		if (separator_index != std::string::npos)
+		{
+			value = line.substr(separator_index + 1);
+			line.resize(separator_index);
+		}
+
+		trie->insert(line, value);
 	}
 
 	return trie;
