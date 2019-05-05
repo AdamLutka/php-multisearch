@@ -1,7 +1,7 @@
 #ifndef MULTISEARCH_TRIE_H
 #define MULTISEARCH_TRIE_H
 
-#include "aho_corasick/trie.h"
+#include "aho_corasick/trie.hpp"
 
 #include <string>
 #include <memory>

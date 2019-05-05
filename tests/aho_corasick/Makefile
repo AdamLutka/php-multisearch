@@ -15,19 +15,19 @@ TESTS_EXECUTABLE = aho_corasick_tests
 
 
 all: build
-	        ./${TESTS_EXECUTABLE}
+	./${TESTS_EXECUTABLE}
 
 build: ${TEST_OBJECTS} ${MAIN_OBJECTS}
-	        ${LINKER} ${LINKER_FLAGS} -o ${TESTS_EXECUTABLE} ${TEST_OBJECTS} ${MAIN_OBJECTS} ${LINKER_DEPENDENCIES}
+	${LINKER} ${LINKER_FLAGS} -o ${TESTS_EXECUTABLE} ${TEST_OBJECTS} ${MAIN_OBJECTS} ${LINKER_DEPENDENCIES}
 
 ${MAIN_OBJECTS}:
-	        ${COMPILER} ${COMPILER_FLAGS} $@ ${@:%.o=%.cpp}
+	${COMPILER} ${COMPILER_FLAGS} $@ ${@:%.o=%.cpp}
 
 ${TEST_OBJECTS}:
-	        ${COMPILER} ${COMPILER_FLAGS} $@ ${@:%.o=%.cpp}
+	${COMPILER} ${COMPILER_FLAGS} $@ ${@:%.o=%.cpp}
 
 clean:
-	        rm -rf ${TESTS_EXECUTABLE} ${TEST_OBJECTS}
+	rm -rf ${TESTS_EXECUTABLE} ${TEST_OBJECTS}
 
 rebuild: clean all
 

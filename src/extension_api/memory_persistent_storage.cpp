@@ -29,7 +29,7 @@ void preload(const std::vector<std::string>& filepaths)
 				auto trie = load_trie(filepath);
 				if (trie)
 				{
-					trie->searchIn("");
+					trie->search_in("");
 					trie_repository::set_trie(filepath, trie, file_info.modified);
 					continue;
 				}

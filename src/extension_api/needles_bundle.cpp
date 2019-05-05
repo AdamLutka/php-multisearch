@@ -181,7 +181,7 @@ PHP_METHOD(NeedlesBundle, searchIn)
 	needles_bundle_object *intern = Z_NB_OBJ_P(getThis());
 	if (intern && intern->trie)
 	{
-		auto sIt = intern->trie->searchIn(haystack);
+		auto sIt = intern->trie->search_in(haystack);
 		while (++sIt)
 		{
 			auto& key = sIt->getKey();
