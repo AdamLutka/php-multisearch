@@ -69,7 +69,7 @@ static void needles_bundle_object_free(zend_object *object)
 static HashTable* needles_bundle_object_get_debug_info(zval *object, int *is_temp)
 {
 	HashTable *ht;
-	zval pairs;
+	zval pairs, size, nodes_count;
 
 	*is_temp = 1;
 	array_init(&pairs);
@@ -77,6 +77,9 @@ static HashTable* needles_bundle_object_get_debug_info(zval *object, int *is_tem
 	needles_bundle_object *intern = Z_NB_OBJ_P(object);
 	if (intern && intern->trie)
 	{
+		ZVAL_LONG(&size, intern->trie->get_byte_size());
+		ZVAL_LONG(&nodes_count, intern->trie->get_nodes_count());
+
 		for (auto& needle : *intern->trie)
 		{
 			auto& key = needle.getKey();
@@ -88,6 +91,8 @@ static HashTable* needles_bundle_object_get_debug_info(zval *object, int *is_tem
 
 	ALLOC_HASHTABLE(ht);
 	zend_hash_init(ht, 1, NULL, ZVAL_PTR_DTOR, 0);
+	zend_hash_str_update(ht, "nodesCount", sizeof("nodesCount") - 1, &nodes_count);
+	zend_hash_str_update(ht, "size", sizeof("size") - 1, &size);
 	zend_hash_str_update(ht, "pairs", sizeof("pairs") - 1, &pairs);
 
 	return ht;

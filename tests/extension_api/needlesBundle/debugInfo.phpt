@@ -16,6 +16,8 @@ print_r($needlesBundle);
 --EXPECT--
 MultiSearch\NeedlesBundle Object
 (
+    [nodesCount] => 6
+    [size] => 500
     [pairs] => Array
         (
             [key1] => value1
