@@ -152,6 +152,8 @@ namespace multisearch
 				public:
 					friend iterator;
 
+					value_type(const KeyT& k) : key(k) {}
+
 					const KeyT& getKey() const { return key; }
 					ValueT& getValue() const { return *value; }
 
@@ -166,7 +168,7 @@ namespace multisearch
 				using reference = value_type&;
 
 
-				iterator(TrieT& trie, const NodeIndexT& node_index) : trie_(trie), current_node_(node_index)
+				iterator(TrieT& trie, const NodeIndexT& node_index, const KeyT& key) : trie_(trie), current_node_(node_index), value_(key)
 				{
 					if (node_index != NULL_NODE_INDEX && !trie_.nodes_[current_node_].is_terminal)
 					{
@@ -448,12 +450,37 @@ namespace multisearch
 					need_sort_ = false;
 				}
 
-				return iterator(*this, ROOT_NODE_INDEX);
+				return iterator(*this, ROOT_NODE_INDEX, KeyT());
 			}
 
 			iterator end()
 			{
-				return iterator(*this, NULL_NODE_INDEX);
+				return iterator(*this, NULL_NODE_INDEX, KeyT());
+			}
+
+			iterator find(const KeyT& key)
+			{
+				NodeIndexT current = ROOT_NODE_INDEX;
+
+				for (auto& key_part : key)
+				{
+					auto it = find_child(nodes_[current], key_part);
+					if (it == nodes_[current].children.end())
+					{
+						return end();
+					}
+
+					current = *it;
+				}
+
+				if (nodes_[current].is_terminal)
+				{
+					return iterator(*this, current, key);
+				}
+				else
+				{
+					return end();
+				}
 			}
 		};
 
