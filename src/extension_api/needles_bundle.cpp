@@ -2,6 +2,7 @@
 #include "common.h"
 #include "needle.h"
 #include "search_hit.h"
+#include "multisearch_exception.h"
 
 #include "zend_exceptions.h"
 
@@ -114,6 +115,14 @@ MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_searchIn, 0, 1, IS_ARRAY,
 	MULTISEARCH_ARG_TYPE_INFO(0, haystack, IS_STRING, 0)
 MULTISEARCH_END_ARG_INFO()
 
+MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_hasNeedle, 0, 1, _IS_BOOL, 0)
+	MULTISEARCH_ARG_TYPE_INFO(0, key, IS_STRING, 0)
+MULTISEARCH_END_ARG_INFO()
+
+MULTISEARCH_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_getNeedle, 0, 1, MULTISEARCH_CLASSNAME(NeedlesBundle), 0)
+	MULTISEARCH_ARG_TYPE_INFO(0, key, IS_STRING, 0)
+MULTISEARCH_END_ARG_INFO()
+
 
 PHP_METHOD(NeedlesBundle, __construct)
 {
@@ -201,11 +210,61 @@ PHP_METHOD(NeedlesBundle, searchIn)
 	}
 }
 
+PHP_METHOD(NeedlesBundle, hasNeedle)
+{
+	char* key;
+	size_t key_len;
+
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STRING(key, key_len)
+	ZEND_PARSE_PARAMETERS_END();
+
+
+	needles_bundle_object* intern = Z_NB_OBJ_P(getThis());
+	if (intern && intern->trie && intern->trie->find(key) != intern->trie->end())
+	{
+		RETURN_BOOL(true);
+	}
+
+	RETURN_BOOL(false);
+}
+
+PHP_METHOD(NeedlesBundle, getNeedle)
+{
+	char* key;
+	size_t key_len;
+
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STRING(key, key_len)
+	ZEND_PARSE_PARAMETERS_END();
+
+
+	needles_bundle_object* intern = Z_NB_OBJ_P(getThis());
+	if (intern && intern->trie)
+	{
+		std::string key_str(key, key_len);
+		auto it = intern->trie->find(key_str);
+
+		if (it == intern->trie->end())
+		{
+			zend_throw_exception_ex(multisearch_ce_exception, 0, "There is no key: %s", key_str.c_str());
+			return;
+		}
+
+		multisearch_init_needle(return_value, it->getKey(), it->getValue());
+	}
+}
+
+
 static zend_function_entry needles_bundle_functions[] = {
 	PHP_ME(NeedlesBundle, __construct, arginfo_construct, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundle, insert, arginfo_insert, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundle, getNeedles, arginfo_getNeedles, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundle, searchIn, arginfo_searchIn, ZEND_ACC_PUBLIC)
+	PHP_ME(NeedlesBundle, getNeedle, arginfo_getNeedle, ZEND_ACC_PUBLIC)
+	PHP_ME(NeedlesBundle, hasNeedle, arginfo_hasNeedle, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
 
