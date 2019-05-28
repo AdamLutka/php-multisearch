@@ -137,6 +137,24 @@ namespace multisearch
 				}
 			}
 
+			NodeIndexT find_node(const KeyT& key)
+			{
+				NodeIndexT current = ROOT_NODE_INDEX;
+
+				for (auto& key_part : key)
+				{
+					auto it = find_child(nodes_[current], key_part);
+					if (it == nodes_[current].children.end())
+					{
+						return NULL_NODE_INDEX;
+					}
+
+					current = *it;
+				}
+
+				return current;
+			}
+
 
 			std::vector<TrieNode> nodes_;
 			bool need_build_ = false;
@@ -412,6 +430,21 @@ namespace multisearch
 				need_sort_ = true;
 			}
 
+			bool remove(const KeyT& key)
+			{
+				auto current = find_node(key);
+
+				if (current != NULL_NODE_INDEX && nodes_[current].is_terminal)
+				{
+					nodes_[current].is_terminal = false;
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+
 			search_iterator search_in(const KeyT& haystack)
 			{
 				if (need_build_)
@@ -460,20 +493,9 @@ namespace multisearch
 
 			iterator find(const KeyT& key)
 			{
-				NodeIndexT current = ROOT_NODE_INDEX;
+				auto current = find_node(key);
 
-				for (auto& key_part : key)
-				{
-					auto it = find_child(nodes_[current], key_part);
-					if (it == nodes_[current].children.end())
-					{
-						return end();
-					}
-
-					current = *it;
-				}
-
-				if (nodes_[current].is_terminal)
+				if (current != NULL_NODE_INDEX && nodes_[current].is_terminal)
 				{
 					return iterator(*this, current, key);
 				}
