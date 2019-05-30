@@ -108,6 +108,10 @@ MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_insert, 0, 1, IS_VOID, 0)
 	MULTISEARCH_ARG_TYPE_INFO(0, value, IS_STRING, 0)
 MULTISEARCH_END_ARG_INFO()
 
+MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_remove, 0, 1, _IS_BOOL, 0)
+	MULTISEARCH_ARG_TYPE_INFO(0, key, IS_STRING, 0)
+MULTISEARCH_END_ARG_INFO()
+
 MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_getNeedles, 0, 0, IS_ARRAY, 0)
 MULTISEARCH_END_ARG_INFO()
 
@@ -135,8 +139,6 @@ PHP_METHOD(NeedlesBundle, insert)
 	char *key, *value = 0;
 	size_t key_len, value_len;
 
-	zval *zthis;
-
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_STRING(key, key_len)
 		Z_PARAM_OPTIONAL
@@ -156,6 +158,25 @@ PHP_METHOD(NeedlesBundle, insert)
 	}
 
 	RETURN_NULL();
+}
+
+PHP_METHOD(NeedlesBundle, remove)
+{
+	char* key;
+	size_t key_len;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STRING(key, key_len)
+	ZEND_PARSE_PARAMETERS_END();
+
+	needles_bundle_object* intern = Z_NB_OBJ_P(getThis());
+	if (intern && intern->trie)
+	{
+		bool result = intern->trie->remove(key);
+		RETURN_BOOL(result);
+	}
+
+	RETURN_BOOL(false);
 }
 
 PHP_METHOD(NeedlesBundle, getNeedles)
@@ -261,6 +282,7 @@ PHP_METHOD(NeedlesBundle, getNeedle)
 static zend_function_entry needles_bundle_functions[] = {
 	PHP_ME(NeedlesBundle, __construct, arginfo_construct, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundle, insert, arginfo_insert, ZEND_ACC_PUBLIC)
+	PHP_ME(NeedlesBundle, remove, arginfo_remove, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundle, getNeedles, arginfo_getNeedles, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundle, searchIn, arginfo_searchIn, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundle, getNeedle, arginfo_getNeedle, ZEND_ACC_PUBLIC)
