@@ -67,28 +67,37 @@ static void needles_bundle_object_free(zend_object *object)
 	zend_object_std_dtor(object); /* call Zend's free handler, which will free object properties */
 }
 
+static void create_pairs(zval* pairs, needles_bundle_object* intern)
+{
+	array_init(pairs);
+
+	if (intern && intern->trie)
+	{
+		for (auto& needle : *intern->trie)
+		{
+			auto& key = needle.getKey();
+			auto& value = needle.getValue();
+
+			add_assoc_string(pairs, key.c_str(), (char*)value.c_str());
+		}
+	}
+}
+
 static HashTable* needles_bundle_object_get_debug_info(zval *object, int *is_temp)
 {
 	HashTable *ht;
 	zval pairs, size, nodes_count;
 
 	*is_temp = 1;
-	array_init(&pairs);
 
 	needles_bundle_object *intern = Z_NB_OBJ_P(object);
 	if (intern && intern->trie)
 	{
 		ZVAL_LONG(&size, intern->trie->get_byte_size());
 		ZVAL_LONG(&nodes_count, intern->trie->get_nodes_count());
-
-		for (auto& needle : *intern->trie)
-		{
-			auto& key = needle.getKey();
-			auto& value = needle.getValue();
-
-			add_assoc_string(&pairs, key.c_str(), (char*)value.c_str());
-		}
 	}
+
+	create_pairs(&pairs, intern);
 
 	ALLOC_HASHTABLE(ht);
 	zend_hash_init(ht, 1, NULL, ZVAL_PTR_DTOR, 0);
@@ -113,6 +122,9 @@ MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_remove, 0, 1, _IS_BOOL, 0
 MULTISEARCH_END_ARG_INFO()
 
 MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_getNeedles, 0, 0, IS_ARRAY, 0)
+MULTISEARCH_END_ARG_INFO()
+
+MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_getPairs, 0, 0, IS_ARRAY, 0)
 MULTISEARCH_END_ARG_INFO()
 
 MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_searchIn, 0, 1, IS_ARRAY, 0)
@@ -202,6 +214,15 @@ PHP_METHOD(NeedlesBundle, getNeedles)
 	}
 }
 
+PHP_METHOD(NeedlesBundle, getPairs)
+{
+	ZEND_PARSE_PARAMETERS_START(0, 0)
+	ZEND_PARSE_PARAMETERS_END();
+
+	needles_bundle_object* intern = Z_NB_OBJ_P(getThis());
+	create_pairs(return_value, intern);
+}
+
 PHP_METHOD(NeedlesBundle, searchIn)
 {
 	char* haystack;
@@ -284,6 +305,7 @@ static zend_function_entry needles_bundle_functions[] = {
 	PHP_ME(NeedlesBundle, insert, arginfo_insert, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundle, remove, arginfo_remove, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundle, getNeedles, arginfo_getNeedles, ZEND_ACC_PUBLIC)
+	PHP_ME(NeedlesBundle, getPairs, arginfo_getPairs, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundle, searchIn, arginfo_searchIn, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundle, getNeedle, arginfo_getNeedle, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundle, hasNeedle, arginfo_hasNeedle, ZEND_ACC_PUBLIC)
