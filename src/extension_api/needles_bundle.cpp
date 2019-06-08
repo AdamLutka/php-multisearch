@@ -7,6 +7,7 @@
 #include "zend_exceptions.h"
 
 #include <cstring>
+#include <sstream>
 
 
 zend_object_handlers needles_bundle_object_handlers;
@@ -117,6 +118,10 @@ MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_insert, 0, 1, IS_VOID, 0)
 	MULTISEARCH_ARG_TYPE_INFO(0, value, IS_STRING, 0)
 MULTISEARCH_END_ARG_INFO()
 
+MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_insertPairs, 0, 1, IS_VOID, 0)
+	MULTISEARCH_ARG_TYPE_INFO(0, pairs, IS_ARRAY, 0)
+MULTISEARCH_END_ARG_INFO()
+
 MULTISEARCH_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_remove, 0, 1, _IS_BOOL, 0)
 	MULTISEARCH_ARG_TYPE_INFO(0, key, IS_STRING, 0)
 MULTISEARCH_END_ARG_INFO()
@@ -167,6 +172,63 @@ PHP_METHOD(NeedlesBundle, insert)
 
 		std::string valueStr = value ? value : "";
 		intern->trie->insert(key, valueStr);
+	}
+
+	RETURN_NULL();
+}
+
+PHP_METHOD(NeedlesBundle, insertPairs)
+{
+	zval *arr, *value;
+	zend_string *skey;
+	zend_long lkey;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ARRAY(arr)
+	ZEND_PARSE_PARAMETERS_END();
+
+	needles_bundle_object* intern = Z_NB_OBJ_P(getThis());
+	if (intern && intern->trie)
+	{
+		if (!intern->trie.unique())
+		{	// need to make copy of trie
+			intern->trie.reset(new multisearch_needles_bundle_trie(*intern->trie));
+		}
+
+		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(arr), lkey, skey, value) {
+			std::string keyStr;
+			std::string valueStr;
+
+			if (skey)
+			{
+				keyStr = ZSTR_VAL(skey);
+			}
+			else
+			{
+				std::stringstream ss;
+				ss << lkey;
+				keyStr = ss.str();
+			}
+
+
+			if (Z_TYPE_P(value) == IS_STRING)
+			{
+				valueStr = ZSTR_VAL(Z_STR_P(value));
+			}
+			else if (Z_TYPE_P(value) == IS_LONG)
+			{
+				std::stringstream ss;
+				ss << Z_LVAL_P(value);
+				valueStr = ss.str();
+			}
+			else
+			{
+				zend_throw_exception_ex(multisearch_ce_exception, 0, "Invalid value of key: %s", keyStr.c_str());
+				return;
+			}
+
+			intern->trie->insert(keyStr, valueStr);
+		} ZEND_HASH_FOREACH_END();
 	}
 
 	RETURN_NULL();
@@ -303,6 +365,7 @@ PHP_METHOD(NeedlesBundle, getNeedle)
 static zend_function_entry needles_bundle_functions[] = {
 	PHP_ME(NeedlesBundle, __construct, arginfo_construct, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundle, insert, arginfo_insert, ZEND_ACC_PUBLIC)
+	PHP_ME(NeedlesBundle, insertPairs, arginfo_insertPairs, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundle, remove, arginfo_remove, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundle, getNeedles, arginfo_getNeedles, ZEND_ACC_PUBLIC)
 	PHP_ME(NeedlesBundle, getPairs, arginfo_getPairs, ZEND_ACC_PUBLIC)
